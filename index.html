@@ -21,7 +21,8 @@
     <div class="wrapper">
       <div id="instructions">
         <div>
-          move with <span class="key">arrows</span> or <span class="key">wasd</span>
+          <header><h1>Space Defender</h1></header>
+          move with <span class="key"> directional arrows</span> or <span class="key"> w = up, d = forward, a = back, x = down</span>
         </div>
         <div>
           shoot with <span class="key">space</span>
@@ -30,10 +31,13 @@
 
       <div id="score"></div>
     </div>
+    <div><button id="resetGame" onclick="gameReset()">Start Over</button></div>
 
     <script type="text/javascript" src="js/resources.js"></script>
     <script type="text/javascript" src="js/input.js"></script>
     <script type="text/javascript" src="js/sprite.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
+
   </body>
+
 </html>

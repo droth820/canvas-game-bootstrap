@@ -1,17 +1,3 @@
-
-// A cross-browser requestAnimationFrame
-// See https://hacks.mozilla.org/2011/08/animating-with-javascript-from-setinterval-to-requestanimationframe/
-var requestAnimFrame = (function(){
-    return window.requestAnimationFrame       ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame    ||
-        window.oRequestAnimationFrame      ||
-        window.msRequestAnimationFrame     ||
-        function(callback){
-            window.setTimeout(callback, 1000 / 60);
-        };
-})();
-
 // Create the canvas
 var canvas = document.createElement("canvas");
 var ctx = canvas.getContext("2d");
@@ -19,7 +5,7 @@ canvas.width = 512;
 canvas.height = 480;
 document.body.appendChild(canvas);
 
-// The main game loop
+// The main game loop continually updates and renders game
 var lastTime;
 function main() {
     var now = Date.now();
@@ -33,7 +19,7 @@ function main() {
 };
 
 function init() {
-    terrainPattern = ctx.createPattern(resources.get('img/terrain.png'), 'repeat');
+    terrainPattern = ctx.createPattern(resources.get('img/space.jpg'), 'repeat');
 
     document.getElementById('play-again').addEventListener('click', function() {
         reset();
@@ -46,9 +32,21 @@ function init() {
 
 resources.load([
     'img/sprites.png',
-    'img/terrain.png'
+    'img/space.jpg'
 ]);
 resources.onReady(init);
+
+//handlers for sound fx
+function laserSound (){//When laser is fired
+    var fire = new Audio("audio/laser.wav");
+    fire.play();
+}
+
+function explosionSound (){
+    var boom = new Audio("audio/explosion.wav")
+    boom.play();
+}
+
 
 // Game state
 var player = {
@@ -82,7 +80,7 @@ function update(dt) {
 
     // It gets harder over time by adding enemies using this
     // equation: 1-.993^gameTime
-    if(Math.random() < 1 - Math.pow(.993, gameTime)) {
+    if(Math.random() < 1 - Math.pow(.995, gameTime)) {
         enemies.push({
             pos: [canvas.width,
                   Math.random() * (canvas.height - 39)],
@@ -97,7 +95,7 @@ function update(dt) {
 };
 
 function handleInput(dt) {
-    if(input.isDown('DOWN') || input.isDown('s')) {
+    if(input.isDown('DOWN') || input.isDown('x')) {
         player.pos[1] += playerSpeed * dt;
     }
 
@@ -116,6 +114,7 @@ function handleInput(dt) {
     if(input.isDown('SPACE') &&
        !isGameOver &&
        Date.now() - lastFire > 100) {
+        laserSound();
         var x = player.pos[0] + player.sprite.size[0] / 2;
         var y = player.pos[1] + player.sprite.size[1] / 2;
 
@@ -130,6 +129,7 @@ function handleInput(dt) {
                        sprite: new Sprite('img/sprites.png', [0, 60], [9, 5]) });
 
         lastFire = Date.now();
+        
     }
 }
 
@@ -171,6 +171,7 @@ function updateEntities(dt) {
     // Update all the explosions
     for(var i=0; i<explosions.length; i++) {
         explosions[i].sprite.update(dt);
+        //explodeSound();
 
         // Remove if animation is done
         if(explosions[i].sprite.done) {
@@ -234,6 +235,7 @@ function checkCollisions() {
 
         if(boxCollides(pos, size, player.pos, player.sprite.size)) {
             gameOver();
+            explosionSound();
         }
     }
 }
@@ -303,3 +305,24 @@ function reset() {
 
     player.pos = [50, canvas.height / 2];
 };
+
+//Reset button gives user the option to reset game at any time
+function gameReset () {
+    var btn = document.getElementById("resetGame");
+    if (btn.onclick){
+        reset();
+    }
+}
+
+//Animation Frame cross-browser request
+var requestAnimFrame = (function(){
+    return window.requestAnimationFrame       ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame    ||
+        window.oRequestAnimationFrame      ||
+        window.msRequestAnimationFrame     ||
+        function(callback){
+        window.setTimeout(callback, 1000 / 60);
+        };
+})();
+

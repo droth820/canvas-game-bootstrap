@@ -1,7 +1,7 @@
 html, body {
+    background-color: #151515;
     margin: 0;
     padding: 0;
-    background-color: #151515;
 }
 
 canvas {
@@ -16,25 +16,25 @@ canvas {
 }
 
 .wrapper {
-    width: 512px;
     margin: 0 auto;
     margin-top: 2em;
+    width: 512px;
 }
 
 #instructions {
+    color: #757575;
     float: left;
     font-family: sans-serif;
-    color: #757575;
 }
 
 #score {
-    float: right;
     color: white;
+    float: right;
     font-size: 2em;
 }
 
 .key {
-    color: #aaffdd;
+    color: #CCCCFF;
 }
 
 #game-over, #game-over-overlay {
@@ -56,14 +56,14 @@ canvas {
 }
 
 #game-over {
+    color: #990033;
     height: 200px;
     text-align: center;
-    color: white;
 }
 
 #game-over h1 {
-    font-size: 3em;
     font-family: sans-serif;
+    font-size: 3em;
 }
 
 #game-over button {
